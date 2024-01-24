@@ -31,15 +31,18 @@ There are many reasons I like [**Zap**](https://github.com/zigzap/zap) but I'll 
 Let me explain each of these reasons:
 
 [Rene](https://github.com/renerocksai) originally started [**Zap**](https://github.com/zigzap/zap) for his own use for work so it was designed to make his work easier. He made many decisions along the way and I believe he made many correct decisions.
+
 He will not implement something just because every other webserver has it nor would he implement something in the same way that other web-servers implemented the feature.
 
 [**Zap**](https://github.com/zigzap/zap) is extremely fast because [facil.io](https://facil.io) is extremely fast. You can check out the full benchmark [here](https://github.com/zigzap/zap/blob/master/blazingly-fast.md).
+
 Of course, benchmarks doesn't tell the full story and can be easily manipulated but it will show at least that the bottleneck is definitely not in [**Zap**](https://github.com/zigzap/zap) or **Zig** itself. 
 
 ![Zap Request/Second](https://raw.githubusercontent.com/zigzap/zap/master/wrk/samples/req_per_sec_graph.png)
 ![Zap Transfer/Second](https://raw.githubusercontent.com/zigzap/zap/master/wrk/samples/xfer_per_sec_graph.png)
 
 [**Zap**](https://github.com/zigzap/zap) is simple because [Rene](https://github.com/renerocksai) didn't implement anything he didn't need and when he does need a feature, he tried to implement it in a very straightforward way which is inline with the design philosophy of **Zig** itself. His code is a pleasure to read and I can honestly say that he was probably the primary reason I was able to learn **Zig**.
+
 [**Zap**](https://github.com/zig) also has one of the best [examples](https://github.com/zigzap/zap/tree/master/examples) of any projects on github. Just by looking at the [example](https://github.com/zigzap/zap/tree/master/examples), you should be able to get up to speed quickly.
 
 ## Why Not Zap
@@ -63,15 +66,15 @@ Lastly, you do have to understand that even the simplest language and simplest w
 For example, to get a string parameter that are passed in the URL, you have to do the following in [**Zap**](https://github.com/zigzap/zap):
 
 ```zig
-            if (r.getParamStr(allocator, "my-param", false)) |maybe_str| {
-                if (maybe_str) |*s| {
-                    defer s.deinit();
+if (r.getParamStr(allocator, "my-param", false)) |maybe_str| {
+    if (maybe_str) |*s| {
+        defer s.deinit();
 
-                    std.log.info("Param my-param = {s}", .{s.str});
-                } else {
-                    std.log.info("Param my-param not found!", .{});
-                }
-            }
+        std.log.info("Param my-param = {s}", .{s.str});
+    } else {
+        std.log.info("Param my-param not found!", .{});
+    }
+}
 ```
 
 There is also no authentication, authorization, or database built-in so you'll end up writing a lot of code to implement these yourself.
@@ -120,38 +123,38 @@ The other steps are the same as 0.11.
 For your **Zap** project, you need to have the following in your `build.zig.zon`:
 
 ```zig
-    .{
-        .name = "wtf-zig-zap",
-        .version = "0.0.1",
+.{
+    .name = "wtf-zig-zap",
+    .version = "0.0.1",
 
-        .dependencies = .{
-            // zap v0.4.0
-            .zap = .{
-                .url = "https://github.com/zigzap/zap/archive/refs/tags/v0.4.0.tar.gz",
-                .hash = "1220a20e883195793cff0f298d647d35f675ad25e6556fe75b9ccabc98a349cbf082",
-            }
+    .dependencies = .{
+        // zap v0.4.0
+        .zap = .{
+            .url = "https://github.com/zigzap/zap/archive/refs/tags/v0.4.0.tar.gz",
+            .hash = "1220a20e883195793cff0f298d647d35f675ad25e6556fe75b9ccabc98a349cbf082",
         }
     }
+}
 ```
 
 For `build.zig`, you need the following:
 
 ```zig
-    const exe = b.addExecutable(.{
-        .name = "wtf-zig-zap",
-        // In this case the main source file is merely a path, however, in more
-        // complicated build scripts, this could be a generated file.
-        .root_source_file = .{ .path = "src/main.zig" },
-        .target = target,
-        .optimize = optimize,
-    });
+const exe = b.addExecutable(.{
+    .name = "wtf-zig-zap",
+    // In this case the main source file is merely a path, however, in more
+    // complicated build scripts, this could be a generated file.
+    .root_source_file = .{ .path = "src/main.zig" },
+    .target = target,
+    .optimize = optimize,
+});
 
-    const zap = b.dependency("zap", .{
-        .target = target,
-        .optimize = optimize,
-    });
-    exe.addModule("zap", zap.module("zap"));
-    exe.linkLibrary(zap.artifact("facil.io"));
+const zap = b.dependency("zap", .{
+    .target = target,
+    .optimize = optimize,
+});
+exe.addModule("zap", zap.module("zap"));
+exe.linkLibrary(zap.artifact("facil.io"));
 ```
 
 ## Setup for Zig master (0.12)
@@ -159,40 +162,40 @@ For `build.zig`, you need the following:
 Because all official [**Zap**](https://github.com/zigzap/zap) releases are based on **Zig** [0.11](https://ziglang.org/download/0.11.0/release-notes.html), for **Zig** master, you'll need to either build your own package or use a package I built.  
 
 ```zig
-    .{
-        .name = "wtf-zig-zap",
-        .version = "0.0.1",
-        // note the extra paths field for zig 0.12
-        .paths = .{"."},
+.{
+    .name = "wtf-zig-zap",
+    .version = "0.0.1",
+    // note the extra paths field for zig 0.12
+    .paths = .{"."},
 
-        .dependencies = .{
-            // zap v0.4.0
-            .zap = .{
-                // note this is a package built from my forked repository
-                .url = "https://github.com/edyu/zap/archive/refs/tags/v0.4.0.tar.gz",
-                // the hash is also different
-                .hash = "12203e381b737b077759d3c63a1752fe79bb35dd50d1122a329a3f7b4504156d5595",
-            }
+    .dependencies = .{
+        // zap v0.4.0
+        .zap = .{
+            // note this is a package built from my forked repository
+            .url = "https://github.com/edyu/zap/archive/refs/tags/v0.4.0.tar.gz",
+            // the hash is also different
+            .hash = "12203e381b737b077759d3c63a1752fe79bb35dd50d1122a329a3f7b4504156d5595",
         }
     }
+}
 ```
 
 The `build.zig` has some more changes due to **Zig** 0.12:
 
 ```zig
-    const exe = b.addExecutable(.{
-        .name = "wtf-zig-zap",
-        .root_source_file = .{ .path = "src/main.zig" },
-        .target = target,
-        .optimize = optimize,
-    });
+const exe = b.addExecutable(.{
+    .name = "wtf-zig-zap",
+    .root_source_file = .{ .path = "src/main.zig" },
+    .target = target,
+    .optimize = optimize,
+});
 
-    const zap = b.dependency("zap", .{
-        .target = target,
-        .optimize = optimize,
-    });
-    exe.root_module.addImport("zap", zap.module("zap"));
-    exe.linkLibrary(zap.artifact("facil.io"));
+const zap = b.dependency("zap", .{
+    .target = target,
+    .optimize = optimize,
+});
+exe.root_module.addImport("zap", zap.module("zap"));
+exe.linkLibrary(zap.artifact("facil.io"));
 ```
 
 ## Hello World
@@ -210,44 +213,44 @@ The workers (`.workers`) do not share memory so if you store states in your [**Z
 For threads, you use `.threads`; you can have more than 1 and note that if all the threads hang, your server will hang as well.
 
 ```zig
-    const std = @import("std");
-    const zap = @import("zap");
+const std = @import("std");
+const zap = @import("zap");
 
-    fn on_request_verbose(r: zap.Request) void {
-        if (r.path) |the_path| {
-            std.debug.print("PATH: {s}\n", .{the_path});
-        }
-
-        if (r.query) |the_query| {
-            std.debug.print("QUERY: {s}\n", .{the_query});
-        }
-        r.sendBody("<html><body><h1>Hello from ZAP!!!</h1></body></html>") catch return;
+fn on_request_verbose(r: zap.Request) void {
+    if (r.path) |the_path| {
+        std.debug.print("PATH: {s}\n", .{the_path});
     }
 
-    fn on_request_minimal(r: zap.Request) void {
-        r.sendBody("<html><body><h1>Hello from ZAP!!!</h1></body></html>") catch return;
+    if (r.query) |the_query| {
+        std.debug.print("QUERY: {s}\n", .{the_query});
     }
+    r.sendBody("<html><body><h1>Hello from ZAP!!!</h1></body></html>") catch return;
+}
 
-    pub fn main() !void {
-        var listener = zap.HttpListener.init(.{
-            .port = 3000,
-            // .on_request = on_request_minimal,
-            .on_request = on_request_verbose,
-            .log = true,
-            .max_clients = 100000,
-        });
-        try listener.listen();
+fn on_request_minimal(r: zap.Request) void {
+    r.sendBody("<html><body><h1>Hello from ZAP!!!</h1></body></html>") catch return;
+}
 
-        std.debug.print("Listening on 0.0.0.0:3000\n", .{});
+pub fn main() !void {
+    var listener = zap.HttpListener.init(.{
+        .port = 3000,
+        // .on_request = on_request_minimal,
+        .on_request = on_request_verbose,
+        .log = true,
+        .max_clients = 100000,
+    });
+    try listener.listen();
 
-        // start worker threads
-        zap.start(.{
-            // if all threads hang, your server will hang
-            .threads = 2,
-            // workers share memory so do not share states if you have multiple workers
-            .workers = 1,
-        });
-    }
+    std.debug.print("Listening on 0.0.0.0:3000\n", .{});
+
+    // start worker threads
+    zap.start(.{
+        // if all threads hang, your server will hang
+        .threads = 2,
+        // workers share memory so do not share states if you have multiple workers
+        .workers = 1,
+    });
+}
 ```
 
 You can now go to `localhost:3000` on your browser to see your server in action!
@@ -257,15 +260,54 @@ You can now go to `localhost:3000` on your browser to see your server in action!
 You can specify a folder for static files with `.public_folder`, which will be served by the server directly.
 
 ```zig
-    const std = @import("std");
-    const zap = @import("zap");
+const std = @import("std");
+const zap = @import("zap");
 
-    fn on_request(r: zap.Request) void {
-        r.setStatus(.not_found);
-        r.sendBody("<html><body><h1>404 - File not found</h1></body></html>") catch return;
-    }
+fn on_request(r: zap.Request) void {
+    r.setStatus(.not_found);
+    r.sendBody("<html><body><h1>404 - File not found</h1></body></html>") catch return;
+}
 
-    pub fn main() !void {
+pub fn main() !void {
+    var listener = zap.HttpListener.init(.{
+        .port = 3000,
+        .on_request = on_request,
+        .log = true,
+        .public_folder = "public",
+        .max_clients = 100000,
+    });
+    try listener.listen();
+
+    std.debug.print("Listening on 0.0.0.0:3000\n", .{});
+
+    // start worker threads
+    zap.start(.{
+        // if all threads hang, your server will hang
+        .threads = 2,
+        // workers share memory so do not share states if you have multiple workers
+        .workers = 1,
+    });
+}
+```
+
+If you put a file such as `zap.png` in `public`, you can access the file with `localhost:3000/zap.png`.
+
+## Bonus
+
+This is not specific to [**Zap**](https://github.com/zigzap/zap) but I found that it's invaluable to keep track of memory leaks while developing my app.
+
+**Zig** made it very easy to keep track of memory leaks so make sure to wrap your server in the following to keep track of memory leaks:
+
+```zig
+pub fn main() !void {
+    var gpa = std.heap.GeneralPurposeAllocator(.{
+        .thread_safe = true,
+    }){};
+
+    {
+        // use this allocator for all your memory allocation
+        var allocator = gpa.allocator();
+
         var listener = zap.HttpListener.init(.{
             .port = 3000,
             .on_request = on_request,
@@ -285,50 +327,13 @@ You can specify a folder for static files with `.public_folder`, which will be s
             .workers = 1,
         });
     }
-```
 
-## Bonus
-
-This is not specific to [**Zap**](https://github.com/zigzap/zap) but I found that it's invaluable to keep track of memory leaks while developing my app.
-
-**Zig** made it very easy to keep track of memory leaks so make sure to wrap your server in the following to keep track of memory leaks:
-
-```zig
-    pub fn main() !void {
-        var gpa = std.heap.GeneralPurposeAllocator(.{
-            .thread_safe = true,
-        }){};
-
-        {
-            // use this allocator for all your memory allocation
-            var allocator = gpa.allocator();
-
-            var listener = zap.HttpListener.init(.{
-                .port = 3000,
-                .on_request = on_request,
-                .log = true,
-                .public_
-                .max_clients = 100000,
-            });
-            try listener.listen();
-
-            std.debug.print("Listening on 0.0.0.0:3000\n", .{});
-
-            // start worker threads
-            zap.start(.{
-                // if all threads hang, your server will hang
-                .threads = 2,
-                // workers share memory so do not share states if you have multiple workers
-                .workers = 1,
-            });
-        }
-    
-        // all defers should have run by now
-        std.debug.print("\n\nSTOPPED!\n\n", .{});
-        // we'll arrive here after zap.stop()
-        const leaked = gpa.detectLeaks();
-        std.debug.print("Leaks detected: {}\n", .{leaked});
-    }
+    // all defers should have run by now
+    std.debug.print("\n\nSTOPPED!\n\n", .{});
+    // we'll arrive here after zap.stop()
+    const leaked = gpa.detectLeaks();
+    std.debug.print("Leaks detected: {}\n", .{leaked});
+}
 ```
 
 Now, if you `Ctrl-C` out of your server, it will report whether you have memory leaks in your application.
