@@ -1,0 +1,16 @@
+.{
+    .name = "wtf-zig-zap",
+    .version = "0.0.1",
+    // note the extra paths field for zig 0.12
+    .paths = .{"."},
+
+    .dependencies = .{
+        // zap v0.4.0
+        .zap = .{
+            // note this is a package built from my forked repository
+            .url="https://github.com/edyu/zap/archive/refs/tags/v0.4.0.tar.gz",
+            // the hash is also different
+            .hash = "12203e381b737b077759d3c63a1752fe79bb35dd50d1122a329a3f7b4504156d5595",
+        },
+    },
+}
