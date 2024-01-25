@@ -30,18 +30,19 @@ There are many reasons I like [**Zap**](https://github.com/zigzap/zap) but I'll 
 
 Let me explain each of these reasons:
 
-[Rene](https://github.com/renerocksai) originally started [**Zap**](https://github.com/zigzap/zap) for his own use for work so it was designed to make his work easier. He made many decisions along the way and I believe he made many correct decisions.
+[Rene](https://github.com/renerocksai) originally started [**Zap**](https://github.com/zigzap/zap) for his own use at work so it was designed to make his work easier. He made many decisions along the way and I believe he made many correct decisions.
 
 He will not implement something just because every other webserver has it nor would he implement something in the same way that other web-servers implemented the feature.
 
 [**Zap**](https://github.com/zigzap/zap) is extremely fast because [facil.io](https://facil.io) is extremely fast. You can check out the full benchmark [here](https://github.com/zigzap/zap/blob/master/blazingly-fast.md).
 
-Of course, benchmarks doesn't tell the full story and can be easily manipulated but it will show at least that the bottleneck is definitely not in [**Zap**](https://github.com/zigzap/zap) or **Zig** itself. 
+Of course, a benchmark doesn't tell the full story and can be easily manipulated but it at least shows that bottleneck is definitely not in [**Zap**](https://github.com/zigzap/zap) or **Zig** itself. 
 
 ![Zap Request/Second](https://raw.githubusercontent.com/zigzap/zap/master/wrk/samples/req_per_sec_graph.png)
+
 ![Zap Transfer/Second](https://raw.githubusercontent.com/zigzap/zap/master/wrk/samples/xfer_per_sec_graph.png)
 
-[**Zap**](https://github.com/zigzap/zap) is simple because [Rene](https://github.com/renerocksai) didn't implement anything he didn't need and when he does need a feature, he tried to implement it in a very straightforward way which is inline with the design philosophy of **Zig** itself. His code is a pleasure to read and I can honestly say that he was probably the primary reason I was able to learn **Zig**.
+[**Zap**](https://github.com/zigzap/zap) is simple because [Rene](https://github.com/renerocksai) didn't implement anything he didn't need and when he did need a feature, he tried to implement it in a straightforward manner. His code is a pleasure to read and I can honestly say that he was probably the primary reason I was able to learn **Zig**.
 
 [**Zap**](https://github.com/zig) also has one of the best [examples](https://github.com/zigzap/zap/tree/master/examples) of any projects on github. Just by looking at the [example](https://github.com/zigzap/zap/tree/master/examples), you should be able to get up to speed quickly.
 
@@ -50,20 +51,20 @@ Of course, benchmarks doesn't tell the full story and can be easily manipulated 
 Of course, [**Zap**](https://github.com/zigzap/zap) is not for everyone and here are three reasons why you may not want to use it:
 
 1. If you have [NIH Syndrome](https://en.wikipedia.org/wiki/Not_invented_here), [**Zap**](https://github.com/zigzap/zap) is **NOT** implemented in **Zig**. 
-2. If you are on Widnows or you need [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) or [HTTP/3](https://en.wikipedia.org/wiki/HTTP/3) because [facil.io](https://facil.io) only implemented HTTP/1.0 and HTTP/1.1.
+2. If you are on Windows or you need [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) or [HTTP/3](https://en.wikipedia.org/wiki/HTTP/3) because [facil.io](https://facil.io) only implemented HTTP/1.0 and HTTP/1.1.
 3. You need to write a lot of code even for simple things in [**Zap**](https://github.com/zigzap/zap) compared to most other web frameworks because [**Zap**](https://github.com/zigzap/zap) is a web-server not a web framework.
 
 ![Not Invented Here](https://www.opeadeoye.ng/CMSFiles/The-Lagoon-Chronicles/images/Dilbert-not-invented-here_strip.gif)
 
 For any new language, there is a tendency for early adopters of that language to reimplement everything in the new shiny language. Even if the language is not new anymore, there will still be plenty of people creating a new *framework* in that language.  
 
-This is certainly not the case for [**Zap**](https://github.com/zigzap/zap) because every feature that was exposed is used by [Rene](https://github.com/renerocksai) himself.
+This is certainly not the case for [**Zap**](https://github.com/zigzap/zap) because every feature that is exposed is used by [Rene](https://github.com/renerocksai) himself.
 
-He also made it very clear that [**Zap**](https://github.com/zigzap/zap) will not reimplement everything in [facil.io](https://facil.io) using **Zig**. [Rene](https://github.com/renerocksai) also tried to minimize any changes to the upstream [facil.io](https://github.com/boazsegev/facil.io).  Unfortunately, it also means that [**Zap**](https://github.com/zigzap/zap) won't run on Windows.
+He also made it very clear that [**Zap**](https://github.com/zigzap/zap) will not reimplement everything in [facil.io](https://facil.io) using **Zig**. [Rene](https://github.com/renerocksai) also tries to minimize any changes to the upstream [facil.io](https://github.com/boazsegev/facil.io).  Unfortunately, it also means that [**Zap**](https://github.com/zigzap/zap) won't run on Windows.
 
-Lastly, you do have to understand that even the simplest language and simplest wrapper would introduce artifacts that complicate the usage due to impedence mismatch. 
+Lastly, understand that even the simplest language and simplest wrapper would introduce artifacts that complicate usage due to impedence mismatch.
 
-For example, to get a string parameter that are passed in the URL, you have to do the following in [**Zap**](https://github.com/zigzap/zap):
+For example, to get a parameter that was passed in the URL, you have to do the following in [**Zap**](https://github.com/zigzap/zap):
 
 ```zig
 if (r.getParamStr(allocator, "my-param", false)) |maybe_str| {
@@ -77,9 +78,9 @@ if (r.getParamStr(allocator, "my-param", false)) |maybe_str| {
 }
 ```
 
-There is also no authentication, authorization, or database built-in so you'll end up writing a lot of code to implement these yourself.
+There is also no authentication (other htan basic HTTP authentication, authorization (other than HTTP Bearer authorization), or database built-in so you'll end up writing a lot of code to implement these yourself.
 
-In some private tests I've done myself, you end up writing about 5 times as much code in **Zig** and [**Zap**](https://github.com/zigzap/zap) than if you use something like **Python** [**FastAPI**](https://fastapi.tiangolo.com), or even comparing to another extremely young web-framework such as **Julia** [**Oxygen.jl**](https://ndortega/Oxygen.jl). So whethat that's worth the tradeoff if up to you. 
+In some private tests I've done myself, you end up writing about 5 times as much code in **Zig** and [**Zap**](https://github.com/zigzap/zap) than if you use something like **Python** [**FastAPI**](https://fastapi.tiangolo.com), or even comparing to another extremely young web-framework such as **Julia** [**Oxygen.jl**](https://ndortega/Oxygen.jl). So whether that's worth the trade-off is up to you. 
 
 Fortunately, as more people start using [**Zap**](https://github.com/zigzap/zap), more features are being added. For example, [**Zap**](https://github.com/zigzap/zap) recently finally has *TLS* added. The built-in [**Mustache**](https://mustache.github.io) template engine is also recently improved as well.   
 
@@ -101,7 +102,7 @@ To build [**Zap**](https://github.com/zigzap/zap), you need to do the following:
 
 If you want to build all the examples:
 
-    ./build_all.sh
+    zig build all
 
 If you only need to build a specific example such as `hello`: 
 
@@ -128,10 +129,10 @@ For your **Zap** project, you need to have the following in your `build.zig.zon`
     .version = "0.0.1",
 
     .dependencies = .{
-        // zap v0.4.0
+        // zap v0.5.0
         .zap = .{
-            .url = "https://github.com/zigzap/zap/archive/refs/tags/v0.4.0.tar.gz",
-            .hash = "1220a20e883195793cff0f298d647d35f675ad25e6556fe75b9ccabc98a349cbf082",
+            .url = "https://github.com/zigzap/zap/archive/refs/tags/v0.5.0.tar.gz",
+            .hash = "1220aabff84ad1d800f5657d6a49cb90dab3799765811ada27faf527be45dd315a4d",
         }
     }
 }
@@ -294,9 +295,9 @@ If you put a file such as `zap.png` in `public`, you can access the file with `l
 
 ## Bonus
 
-This is not specific to [**Zap**](https://github.com/zigzap/zap) but I found that it's invaluable to keep track of memory leaks while developing my app.
+This is not specific to [**Zap**](https://github.com/zigzap/zap) but I found that it's invaluable to keep track of memory leaks during development.
 
-**Zig** made it very easy to keep track of memory leaks so make sure to wrap your server in the following to keep track of memory leaks:
+**Zig** makes it very easy to keeping track of memory leaks. Just wrap your server code as follows:
 
 ```zig
 pub fn main() !void {
@@ -336,13 +337,13 @@ pub fn main() !void {
 }
 ```
 
-Now, if you `Ctrl-C` out of your server, it will report whether you have memory leaks in your application.
+Now, whenever you `Ctrl-C` out of your server, it will report whether you have memory leaks in your application.
 
 ## Until Next Time
 
 Once again, I recommend reading the [examples](https://github.com/zigzap/zap/tree/master/examples) because there is pretty much an example of everything to get you started such as sending a file, using a template engine, and basic routing.
 
-As I wrote earlier, there is no authentication built-in so if you want to use [cookies](https://en.wikipedia.org/wiki/HTTP_cookie) for authentication and/or [OAuth](https://en.wikipedia.org/wiki/OAuth), you need to implement it yourself. I'll likely follow up next time with an [oauth](https://en.wikipedia.org/wiki/OAuth) implementation in [**Zap**](https://github.com/zigzap/zap).
+As I wrote earlier, there is no modern authentication built-in so if you want to use [cookies](https://en.wikipedia.org/wiki/HTTP_cookie) for authentication and/or [OAuth](https://en.wikipedia.org/wiki/OAuth), you need to implement it yourself. I'll likely follow up next time with an [oauth](https://en.wikipedia.org/wiki/OAuth) implementation in [**Zap**](https://github.com/zigzap/zap).
 
 ## The End
 
