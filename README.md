@@ -78,7 +78,7 @@ if (r.getParamStr(allocator, "my-param", false)) |maybe_str| {
 }
 ```
 
-There is also no authentication (other htan basic HTTP authentication, authorization (other than HTTP Bearer authorization), or database built-in so you'll end up writing a lot of code to implement these yourself.
+There is also no authentication (other than basic HTTP authentication), authorization (other than HTTP Bearer authorization), or database built-in so you'll end up writing a lot of code to implement these yourself.
 
 In some private tests I've done myself, you end up writing about 5 times as much code in **Zig** and [**Zap**](https://github.com/zigzap/zap) than if you use something like **Python** [**FastAPI**](https://fastapi.tiangolo.com), or even comparing to another extremely young web-framework such as **Julia** [**Oxygen.jl**](https://ndortega/Oxygen.jl). So whether that's worth the trade-off is up to you. 
 
@@ -254,6 +254,10 @@ pub fn main() !void {
 }
 ```
 
+To run this:
+
+    zig build run
+
 You can now go to `localhost:3000` on your browser to see your server in action!
 
 ## Static Files
@@ -291,7 +295,7 @@ pub fn main() !void {
 }
 ```
 
-If you put a file such as `zap.png` in `public`, you can access the file with `localhost:3000/zap.png`.
+If you put a file such as `zap.png` in the `public` directory, you can access the file with `localhost:3000/zap.png`.
 
 ## Bonus
 
@@ -354,5 +358,7 @@ You can find the code for the article [here](https://github.com/edyu/wtf-zig-zap
 **Facil.io** is [here](https://facil.io) and the code is [here](https://github.com/boazsegev/facil.io).
 
 The examples are [here](https://github.com/zigzap/zap/tree/master/examples).
+
+The [**Zap**](https://github.com/zigzap/zap) discord is [here](https://discord.gg/CWEQxEHF).
 
 ## ![Zig Logo](https://ziglang.org/zero.svg)
